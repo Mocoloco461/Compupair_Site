@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מעבדה - CompuPair</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            text-align: center;
+            direction: rtl;
+            padding: 2rem;
+        }
+        .login-container, .content {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 1.5rem;
+            padding: 0.5rem 1rem;
+            background-color: #0056b3;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #004494;
+        }
+        #error-msg {
+            color: red;
+            margin-top: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="login-container">
+        <h2>כניסה למעבדה</h2>
+        <form id="login-form">
+            <label for="username">שם משתמש</label>
+            <input type="text" id="username" required>
+            <label for="password">סיסמה</label>
+            <input type="password" id="password" required>
+            <button type="submit">התחבר</button>
+            <p id="error-msg">שם משתמש או סיסמה אינם נכונים</p>
+        </form>
+    </div>
+
+    <div class="content" id="content" style="display:none;">
+        <h2>מעבדה</h2>
+        <p><a href="https://airtable.com/appfVqTauHOktzGSb/pagBgizsG0uVBWZEK/form?share=show" target="_blank">לטופס המעבדה לחצו כאן</a></p>
+        <button id="logout-btn">התנתק</button>
+    </div>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+            if (user === 'admoshe' && pass === 'Mo2021') {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+                sessionStorage.setItem('labAuth', 'true');
+            } else {
+                document.getElementById('error-msg').style.display = 'block';
+            }
+        });
+
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('labAuth') === 'true') {
+                document.getElementById('login-container').style.display = 'none';
+                document.getElementById('content').style.display = 'block';
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            sessionStorage.removeItem('labAuth');
+            document.getElementById('login-container').style.display = 'block';
+            document.getElementById('content').style.display = 'none';
+            loginForm.reset();
+            document.getElementById('error-msg').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
