@@ -4,41 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CompuPair - פתרונות מחשוב מקצועיים</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;CompuPair&quot;,&quot;short_name&quot;:&quot;CompuPair&quot;,&quot;description&quot;:&quot;פתרונות מחשוב מקצועיים&quot;,&quot;start_url&quot;:&quot;/&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#2563eb&quot;,&quot;theme_color&quot;:&quot;#2563eb&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='20' fill='%232563eb'/%3E%3Ctext x='96' y='120' text-anchor='middle' fill='white' font-size='80' font-family='Arial'%3ECP%3C/text%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]}">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="CompuPair">
     <style>
         :root {
-            --primary-color: #0056b3;
-            --secondary-color: #004494;
-            --accent-color: #00a6ff;
-            --light-color: #f8f9fa;
-            --dark-color: #343a40;
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #1e40af;
+            --accent-color: #3b82f6;
+            --accent-light: #60a5fa;
+            --light-color: #f8fafc;
+            --dark-color: #1e293b;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
             --whatsapp-color: #25D366;
-            --card-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --hover-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            --transition: all 0.3s ease;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --error-color: #ef4444;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --card-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --hover-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            --border-radius: 12px;
+            --border-radius-lg: 16px;
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             direction: rtl;
             text-align: right;
             line-height: 1.6;
-            color: #333;
-            background-color: #f9f9f9;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(37, 99, 235, 0.2);
+            z-index: 1001;
+        }
+        
+        .scroll-progress {
+            height: 100%;
+            background: var(--gradient-primary);
+            width: 0%;
+            transition: width 0.1s ease;
         }
         
         header {
-            background-color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             position: fixed;
             width: 100%;
             z-index: 1000;
             top: 0;
+            transition: var(--transition);
+        }
+        
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
         
         .navbar {
@@ -46,78 +137,199 @@
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 5%;
-            max-width: 1200px;
+            padding: 1.5rem 5%;
+            max-width: 1400px;
             margin: 0 auto;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            font-weight: 700;
-            font-size: 1.5rem;
+            font-weight: 800;
+            font-size: 1.75rem;
             color: var(--primary-color);
-            margin-bottom: 0;
-        }
-        
-        .logo img {
-            height: 40px;
-            margin-left: 10px;
-        }
-        
-        .logo {
-            text-decoration: none; /* מסיר את הקו התחתון של הקישור */
-            cursor: pointer; /* משנה את סמן העכבר כשמרחפים מעל הלוגו */
+            text-decoration: none;
+            cursor: pointer;
             transition: var(--transition);
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+        
+        .logo:hover::before {
+            width: 100%;
         }
         
         .logo:hover {
-             color: var(--accent-color); /* משנה את הצבע כשמרחפים מעל הלוגו */
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            margin-left: 12px;
+            background: var(--gradient-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .logo:hover .logo-icon {
+            transform: rotate(5deg) scale(1.1);
         }
 
 
         .nav-links {
             display: flex;
-            gap: 1.5rem;
+            gap: 0.5rem;
             justify-content: flex-end;
+            align-items: center;
         }
         
         .nav-links a {
             text-decoration: none;
-            color: var(--dark-color);
+            color: var(--text-primary);
             font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.75rem 1.25rem;
+            border-radius: 50px;
             transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .nav-links a:hover::before {
+            opacity: 0.1;
         }
         
         .nav-links a:hover {
             color: var(--primary-color);
-        }
-        
-        .nav-button {
-            color: var(--dark-color) !important;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            transition: var(--transition);
-        }
-        
-        .nav-button:hover {
-            background-color: rgba(0,86,179,0.15);
-            color: var(--primary-color) !important;
             transform: translateY(-2px);
         }
         
         .contact-nav-link {
-            background-color: var(--primary-color);
+            background: var(--gradient-primary);
             color: white !important;
-            padding: 0.5rem 1.2rem;
-            border-radius: 50px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            font-weight: 600;
+        }
+        
+        .contact-nav-link::before {
+            background: rgba(255, 255, 255, 0.2);
         }
         
         .contact-nav-link:hover {
-            background-color: var(--accent-color);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+        
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--primary-color);
+            color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+        
+        /* Dark Mode Styles */
+        [data-theme="dark"] {
+            --primary-color: #3b82f6;
+            --primary-dark: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #60a5fa;
+            --accent-light: #93c5fd;
+            --light-color: #1e293b;
+            --dark-color: #0f172a;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --card-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        [data-theme="dark"] body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+        
+        [data-theme="dark"] header {
+            background: rgba(15, 23, 42, 0.95);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-theme="dark"] header.scrolled {
+            background: rgba(15, 23, 42, 0.98);
+        }
+        
+        [data-theme="dark"] .services,
+        [data-theme="dark"] .about,
+        [data-theme="dark"] .why-us {
+            background: var(--dark-color);
+        }
+        
+        [data-theme="dark"] .service-card,
+        [data-theme="dark"] .benefit-card {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        [data-theme="dark"] .contact {
+            background: var(--gradient-primary);
+        }
+        
+        [data-theme="dark"] footer {
+            background: var(--dark-color);
+        }
+        
+        [data-theme="dark"] .theme-toggle {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+        
+        [data-theme="dark"] .theme-toggle:hover {
+            background: var(--accent-color);
+            color: var(--dark-color);
         }
         
         .hero-cta {
@@ -126,22 +338,89 @@
         }
         
         .hero {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: var(--gradient-primary);
             color: white;
             text-align: center;
-            padding: 10rem 2rem 5rem;
+            padding: 12rem 2rem 6rem;
             margin-top: 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
         }
         
         .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 1s ease-out;
         }
         
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 0 auto 2.5rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .hero-stat {
+            text-align: center;
+        }
+        
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            color: #ffffff;
+        }
+        
+        .hero-stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 0.5rem;
         }
         
         .services {
@@ -298,67 +577,180 @@
             transform: translateX(-5px) rotate(180deg);
         }
         
+        /* Mobile Menu */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: var(--primary-color);
+            margin: 3px 0;
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .hamburger-menu.active .bar:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+        
+        .hamburger-menu.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+        
+        .hamburger-menu.active .bar:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
         @media (max-width: 768px) {
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .hamburger-menu {
-        display: block;
-        cursor: pointer;
-    }
-
-    .bar {
-    width: 25px;
-    height: 3px;
-    background-color: var(--primary-color);
-    margin: 5px 0;
-    transition: 0.4s;
-
-    }
-
-    .nav-links {
-        position: fixed;
-        right: -100%;
-        top: 70px;
-        flex-direction: column;
-        background-color: white;
-        width: 70%;
-        text-align: center;
-        transition: 0.3s;
-        box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
-        padding: 20px;
-        border-radius: 10px;
-        z-index: 1000;
-    }
-    
-    .nav-links.active {
-        right: 0;
-    }
-    
-    .nav-links a {
-        margin: 1rem 0;
-        display: block;
-    }
-    
-    .navbar {
-        justify-content: space-between;
-        padding: 1rem 5%;
-    }
-    
-    /* עיצוב המבורגר פתוח */
-    .hamburger-menu.active .bar:nth-child(1) {
-        transform: rotate(-45deg) translate(-5px, 6px);
-    }
-    
-    .hamburger-menu.active .bar:nth-child(2) {
-        opacity: 0;
-    }
-    
-    .hamburger-menu.active .bar:nth-child(3) {
-        transform: rotate(45deg) translate(-5px, -6px);
-    }
-}
+            .hamburger-menu {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: var(--transition);
+                box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                padding: 2rem;
+            }
+            
+            .nav-links.active {
+                right: 0;
+            }
+            
+            .nav-links a {
+                margin: 1rem 0;
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+                width: 100%;
+                text-align: center;
+                border-radius: var(--border-radius);
+            }
+            
+            .navbar {
+                padding: 1rem 5%;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .logo-icon {
+                width: 35px;
+                height: 35px;
+            }
+            
+            /* Hero section mobile */
+            .hero {
+                padding: 10rem 1rem 4rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+                line-height: 1.3;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+            
+            .hero-stat-number {
+                font-size: 2rem;
+            }
+            
+            /* Services mobile */
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .service-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            /* About mobile */
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .about-image-container {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+            
+            /* Benefits mobile */
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .benefit-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            /* Contact mobile */
+            .contact-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .contact-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .contact-button, .whatsapp-button {
+                width: 100%;
+                text-align: center;
+                padding: 1rem 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .services h2, .about h2, .why-us h2 {
+                font-size: 1.75rem;
+            }
+            
+            .service-card, .benefit-card {
+                padding: 1.5rem 1rem;
+            }
+            
+            .navbar {
+                padding: 1rem 3%;
+            }
+        }
         
         .about {
             background-color: var(--light-color);
@@ -698,22 +1090,48 @@
         }
         
         .whatsapp-button {
-            display: inline-block;
-            background-color: var(--whatsapp-color);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, var(--whatsapp-color) 0%, #1fbd58 100%);
             color: white;
-            padding: 1rem 2.5rem;
+            padding: 1.25rem 2.5rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: 600;
             font-size: 1.2rem;
             transition: var(--transition);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .whatsapp-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: var(--transition);
+        }
+        
+        .whatsapp-button:hover::before {
+            left: 100%;
         }
         
         .whatsapp-button:hover {
-            background-color: #1fbd58;
             transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.4);
+        }
+        
+        .whatsapp-button svg {
+            transition: var(--transition);
+        }
+        
+        .whatsapp-button:hover svg {
+            transform: scale(1.1);
         }
         
         footer {
@@ -827,22 +1245,32 @@
     </style>
 </head>
 <body>
-    <header>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scroll-progress"></div>
+    </div>
+    
+    <header id="header">
         <nav class="navbar">
             <a href="#" class="logo">
                 CompuPair
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right: 10px;">
-                    <rect x="4" y="1" width="16" height="20" rx="2" />
-                    <line x1="8" y1="8" x2="16" y2="8" />
-                    <line x1="8" y1="12" x2="16" y2="12" />
-                    <line x1="8" y1="16" x2="12" y2="16" />
-                </svg>
-            </div>
+                <div class="logo-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+            </a>
             <div class="nav-links">
                 <a href="#about" class="nav-button">אודות</a>
                 <a href="#services" class="nav-button">השירותים שלנו</a>
                 <a href="#why-us" class="nav-button">למה לבחור בנו</a>
                 <a href="lab.html" class="nav-button">מעבדה</a>
+                <button class="theme-toggle" id="theme-toggle" title="החלף מצב תצוגה">
+                    <i class="fas fa-moon"></i>
+                </button>
                 <a href="#contact" class="contact-nav-link">צור קשר</a>
             </div>
             <div class="hamburger-menu">
@@ -854,15 +1282,29 @@
     </header>
 
     <section class="hero">
-        <h1>פתרונות מחשוב מקצועיים</h1>
-        <p>ב-<strong>קומפיופר</strong> המחשב שלך בידיים טובות <br> תיקונים, שדרוגים והתקנות באמינות ובמחיר הוגן.</p>
-        <div class="hero-cta">
-            <a href="https://wa.me/972508838662" target="_blank" class="whatsapp-button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white" style="vertical-align: middle; margin-left: 8px;">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M20.4539 3.5461C18.2121 1.30435 15.2013 0.0529951 12.0529 0.00137816C5.4669 0.00137816 0.103785 5.36449 0.103785 11.9505C0.103785 14.0595 0.664677 16.1133 1.73242 17.9051L0 24.0014L6.23089 22.3034C7.96039 23.2798 9.9312 23.7959 11.9447 23.7959H12.0529C18.6389 23.7959 24 18.4328 24 11.8468C24 8.69848 22.6956 5.78785 20.4539 3.5461ZM12.0529 21.8195C10.2611 21.8195 8.50507 21.3229 6.96946 20.3997L6.60507 20.1844L2.85472 21.1628L3.83312 17.5066L3.58653 17.1215C2.57361 15.5307 2.02989 13.7389 2.02989 11.9505C2.02989 6.44932 6.55195 2.03 12.053 2.03C14.6479 2.03 17.0854 3.05025 18.9324 4.95006C20.7795 6.79718 21.8523 9.23474 21.8523 11.8468C21.8523 17.3479 17.5543 21.8195 12.0529 21.8195ZM17.5543 14.4446C17.248 14.2845 15.7676 13.5684 15.5072 13.4636C15.2467 13.3589 15.0416 13.3037 14.837 13.6099C14.632 13.9162 14.0661 14.5824 13.9062 14.7869C13.7462 14.9915 13.5862 15.0191 13.2799 14.859C13.0753 14.7869 12.0529 14.4446 10.8243 13.3589C9.85314 12.4961 9.20162 11.4461 9.04168 11.1398C8.88174 10.8335 9.02444 10.6736 9.16714 10.529C9.28259 10.4242 9.42528 10.2367 9.55074 10.0767C9.6762 9.9168 9.73143 9.81201 9.83624 9.60746C9.94105 9.4029 9.88581 9.24296 9.83057 9.0829C9.77534 8.92296 9.12372 7.44257 8.86689 6.83005C8.61006 6.21752 8.35322 6.32977 8.19328 6.32977C8.03335 6.32977 7.82813 6.27454 7.62369 6.27454C7.41915 6.27454 7.10386 6.32977 6.84344 6.63606C6.58301 6.94234 5.81124 7.65844 5.81124 9.13884C5.81124 10.6192 6.89779 12.0449 7.02314 12.2494C7.1486 12.454 9.10929 15.5708 12.2751 16.8546C13.007 17.1608 13.5807 17.3207 14.0224 17.4354C14.7484 17.6127 15.4195 17.5849 15.9524 17.5297C16.5507 17.4745 17.7793 16.8546 18.0361 16.1374C18.2966 15.4201 18.2966 14.8076 18.2413 14.7071C18.1861 14.6065 17.9815 14.5528 17.5535 14.4446H17.5543Z"/>
-                </svg>
-                צור קשר עכשיו
-            </a>
+        <div class="hero-content">
+            <h1>פתרונות מחשוב מקצועיים</h1>
+            <p>ב-<strong>קומפיופר</strong> המחשב שלך בידיים טובות <br> תיקונים, שדרוגים והתקנות באמינות ובמחיר הוגן.</p>
+            <div class="hero-cta">
+                <a href="https://wa.me/972508838662" target="_blank" class="whatsapp-button">
+                    <i class="fab fa-whatsapp"></i>
+                    צור קשר עכשיו
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">500+</span>
+                    <span class="hero-stat-label">מחשבים מתוקנים</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">98%</span>
+                    <span class="hero-stat-label">שביעות רצון</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">24/7</span>
+                    <span class="hero-stat-label">תמיכה זמינה</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1155,24 +1597,254 @@
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Loading screen
+            const loading = document.getElementById('loading');
+            setTimeout(() => {
+                loading.classList.add('hidden');
+            }, 1500);
+            
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Scroll progress indicator
+            const scrollProgress = document.getElementById('scroll-progress');
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset;
+                const docHeight = document.body.offsetHeight - window.innerHeight;
+                const scrollPercent = (scrollTop / docHeight) * 100;
+                scrollProgress.style.width = scrollPercent + '%';
+            });
+            
+            // Mobile menu
             const hamburger = document.querySelector('.hamburger-menu');
             const navLinks = document.querySelector('.nav-links');
             
-            hamburger.addEventListener('click', function() {
-                hamburger.classList.toggle('active');
-                navLinks.classList.toggle('active');
-            });
+            if (hamburger && navLinks) {
+                hamburger.addEventListener('click', function() {
+                    hamburger.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+                
+                // Close menu when clicking on links
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        hamburger.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+            }
             
-            // סגירת התפריט כשלוחצים על קישור
-            document.querySelectorAll('.nav-links a').forEach(link => {
-                link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    navLinks.classList.remove('active');
+            // Smooth scrolling for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 });
             });
             
-            // הוספת השנה הנוכחית
-            document.getElementById('current-year').textContent = new Date().getFullYear();
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe elements for animation
+            document.querySelectorAll('.service-card, .benefit-card, .about-feature').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+            
+            // Counter animation for hero stats
+            const animateCounter = (element, target, duration = 2000) => {
+                let start = 0;
+                const increment = target / (duration / 16);
+                const timer = setInterval(() => {
+                    start += increment;
+                    if (start >= target) {
+                        element.textContent = target + (target === 98 ? '%' : target === 500 ? '+' : '');
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = Math.floor(start) + (target === 98 ? '%' : target === 500 ? '+' : '');
+                    }
+                }, 16);
+            };
+            
+            // Animate counters when hero section is visible
+            const heroObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const counters = entry.target.querySelectorAll('.hero-stat-number');
+                        counters.forEach((counter, index) => {
+                            const target = index === 0 ? 500 : index === 1 ? 98 : 24;
+                            setTimeout(() => {
+                                animateCounter(counter, target);
+                            }, index * 200);
+                        });
+                        heroObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            const heroStats = document.querySelector('.hero-stats');
+            if (heroStats) {
+                heroObserver.observe(heroStats);
+            }
+            
+            // Add current year
+            const currentYearElement = document.getElementById('current-year');
+            if (currentYearElement) {
+                currentYearElement.textContent = new Date().getFullYear();
+            }
+            
+            // Add hover effects to service cards
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+            
+            // Dark Mode Toggle
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+            
+            // Check for saved theme preference or default to 'light'
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            
+            if (currentTheme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            }
+            
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                
+                // Update icon
+                themeIcon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+                
+                // Add transition effect
+                document.body.style.transition = 'background 0.3s ease, color 0.3s ease';
+                setTimeout(() => {
+                    document.body.style.transition = '';
+                }, 300);
+            });
+            
+            // Add theme toggle to mobile menu
+            const mobileThemeToggle = document.createElement('button');
+            mobileThemeToggle.className = 'theme-toggle mobile-theme-toggle';
+            mobileThemeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            mobileThemeToggle.title = 'החלף מצב תצוגה';
+            
+            // Sync mobile theme toggle with desktop
+            const syncThemeToggle = () => {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const icon = mobileThemeToggle.querySelector('i');
+                icon.className = currentTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+            };
+            
+            mobileThemeToggle.addEventListener('click', function() {
+                themeToggle.click();
+                syncThemeToggle();
+            });
+            
+            // Add mobile theme toggle to mobile menu
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks) {
+                navLinks.appendChild(mobileThemeToggle);
+            }
+            
+            // Initialize mobile theme toggle
+            syncThemeToggle();
+            
+            // PWA Install Prompt
+            let deferredPrompt;
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                
+                // Show install button (optional)
+                const installBtn = document.createElement('button');
+                installBtn.className = 'install-btn';
+                installBtn.innerHTML = '<i class="fas fa-download"></i> התקן אפליקציה';
+                installBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    left: 20px;
+                    background: var(--gradient-primary);
+                    color: white;
+                    border: none;
+                    padding: 1rem 1.5rem;
+                    border-radius: 50px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+                    transition: var(--transition);
+                    z-index: 1000;
+                `;
+                
+                installBtn.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const { outcome } = await deferredPrompt.userChoice;
+                        console.log(`User response to the install prompt: ${outcome}`);
+                        deferredPrompt = null;
+                        installBtn.remove();
+                    }
+                });
+                
+                // Auto-hide after 10 seconds
+                setTimeout(() => {
+                    if (installBtn.parentNode) {
+                        installBtn.remove();
+                    }
+                }, 10000);
+                
+                document.body.appendChild(installBtn);
+            });
+            
+            // Service Worker Registration
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('data:text/javascript,console.log("SW registered")')
+                        .then((registration) => {
+                            console.log('SW registered: ', registration);
+                        })
+                        .catch((registrationError) => {
+                            console.log('SW registration failed: ', registrationError);
+                        });
+                });
+            }
         });
     </script>
     </body>
